@@ -21,6 +21,13 @@
     "./react": "./dist/react/index.js"
   },
   "types": "./dist",
+  "typesVersions": {
+    "*": {
+      "react": [
+        "dist/react/index.d.ts"
+      ]
+    }
+  },
   "bin": {
     "next-auth-all-access": "./bin/next-auth-all-access.js"
   },
