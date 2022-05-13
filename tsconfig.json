@@ -1,6 +1,6 @@
 {
 	"compilerOptions": {
-		"module": "NodeNext",
+		"module": "ES2020",
 		"moduleResolution": "node",
 		"target": "ES2020",
 		"lib": [
@@ -27,8 +27,8 @@
 		"useDefineForClassFields": true,
 		"forceConsistentCasingInFileNames": true,
 		"skipLibCheck": true,    
-		"outDir": "dist",
-    "baseUrl": "src"
+		"rootDir": "src",
+		"outDir": "dist"
 	},
   "include": [
     "src"

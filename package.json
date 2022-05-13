@@ -8,7 +8,7 @@
     "next-auth-all-access": "./bin/next-auth-all-access.mjs"
   },
   "scripts": {
-    "build": "del-cli dist && tsc",
+    "build": "del-cli dist && tsc -p tsconfig.build.json",
     "preparex": "npm run build",
     "release": "np",
     "test": "eslint src && ava"
@@ -60,22 +60,18 @@
       "ts": "module"
     },
     "files": [
-      "**/*.test.ts"
+      "src/**/*.test.ts"
     ],
     "nodeArguments": [
       "--loader=ts-node/esm"
-    ],
-    "nonSemVerExperiments": {
-      "nextGenConfig": true,
-      "configurableModuleFormat": true
-    },
-    "timeout": "1m"
+    ]
   },
   "dependencies": {
     "jose": "^4.8.1",
     "meow": "^10.1.2"
   },
   "devDependencies": {
+    "@ava/typescript": "^3.0.1",
     "@types/node": "^14.15.0",
     "@types/react": "^17.0.2",
     "@typescript-eslint/eslint-plugin": "^5.23.0",
@@ -94,7 +90,7 @@
     "react-dom": "^17.0.2",
     "ts-node": "^10.7.0",
     "type-fest": "^2.12.2",
-    "typescript": "^4.8.0-dev.20220513"
+    "typescript": "^4.6.4"
   },
   "peerDependencies": {
     "next-auth": "^4.3.4",
