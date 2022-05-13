@@ -1,1 +1,2 @@
-export { default } from './next-auth-all-access.js';
+export {default} from './next-auth-all-access.js';
+

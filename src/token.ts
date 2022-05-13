@@ -1,8 +1,8 @@
-import type { KeyLike } from 'jose';
-import { SignJWT } from 'jose';
-import type { Client, NextAuthToken } from './types.js';
+import type {KeyLike} from 'jose';
+import {SignJWT} from 'jose';
+import type {AllAccessToken, Client, NextAuthToken} from './types.js';
 
-interface CreateSignTokenParams {
+interface CreateSignTokenParameters {
   id: string;
   privateKey: KeyLike;
   expiration?: string | number;
@@ -11,13 +11,13 @@ interface CreateSignTokenParams {
   audience: string;
 }
 
-export function createSigningFn({ id, privateKey, expiration, kid, issuer, audience }: CreateSignTokenParams) {
-  return async (token: NextAuthToken) => {
+export function createSigningFn({id, privateKey, expiration, kid, issuer, audience}: CreateSignTokenParameters) {
+  return async (token: NextAuthToken): Promise<AllAccessToken> => {
     const signed = await new SignJWT(token)
       .setProtectedHeader({
         typ: 'JWT',
         alg: 'RS256',
-        kid
+        kid,
       })
       .setIssuer(issuer)
       .setAudience(audience)
@@ -25,29 +25,27 @@ export function createSigningFn({ id, privateKey, expiration, kid, issuer, audie
       .setIssuedAt()
       .sign(privateKey);
 
-    return { id, accessToken: signed };
+    return {id, accessToken: signed};
   };
 }
 
-export interface CreateSigningFnsParams {
+export interface CreateSigningFnsParameters {
   clients: Client[];
   privateKey: KeyLike;
   issuer: string;
   kid: string;
 }
 
-export function createSigningFns({ clients, privateKey, issuer, kid }: CreateSigningFnsParams) {
-  const accessTokenSigningFns = clients.map((client) => {
-    return createSigningFn({
-      ...client,
-      privateKey,
-      issuer,
-      kid
-    });
-  });
+export function createSigningFns({clients, privateKey, issuer, kid}: CreateSigningFnsParameters) {
+  const accessTokenSigningFns = clients.map(client => createSigningFn({
+    ...client,
+    privateKey,
+    issuer,
+    kid,
+  }));
 
   return async (token: NextAuthToken) => {
-    const signedTokens = await Promise.all(accessTokenSigningFns.map((fn) => fn(token)));
-    return signedTokens.reduce((s, v) => ({ ...s, [v.id]: v }), {});
+    const signedTokens = await Promise.all(accessTokenSigningFns.map(async fn => fn(token)));
+    return Object.fromEntries(signedTokens.map(v => [v.id, v]));
   };
 }

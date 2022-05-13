@@ -1,29 +1,37 @@
 import fs from 'fs';
-import type { NextApiRequest, NextApiResponse } from 'next';
-import type { NextAuthOptions } from 'next-auth';
-import { createSessionCallback } from './callbacks.js';
+import type {NextApiHandler, NextApiRequest, NextApiResponse} from 'next';
+import type {NextAuthOptions} from 'next-auth';
+import {createSessionCallback} from './callbacks.js';
 import jwksHandler from './handlers/jwks.js';
 import openidConfigurationHandler from './handlers/openid-configuration.js';
-import { importPKCS8 } from './key.js';
-import type { CreateSigningFnsParams } from './token.js';
-import type { HandlerOptions, NextAuthAllAccessOptions } from './types.js';
-import { getIssuer, getOrigin, sanitizeKey } from './utils.js';
+import {importPkcs8} from './key.js';
+import type {CreateSigningFnsParameters} from './token.js';
+import type {HandlerOptions, NextAuthAllAccessOptions} from './types.js';
+import {isJsonWebKeySet} from './types.js';
+import {getIssuer, getOrigin, sanitizeKey} from './utils.js';
 
-function NextAuthAllAccessHandler(options: HandlerOptions, nextAuth: any) {
+function nextAuthAllAccessHandler(options: HandlerOptions, nextAuth: NextApiHandler) {
   return async (req: NextApiRequest, res: NextApiResponse) => {
     let {
-      query: { nextauth: route }
+      query: {nextauth: route},
     } = req;
 
     route = (Array.isArray(route) ? route : [route]).join('/');
 
     switch (route) {
-      case 'all-access/jwks.json':
-        return jwksHandler(options, req, res);
-      case 'all-access/.well-known/openid-configuration':
-        return openidConfigurationHandler(options, req, res);
-      default:
-        return nextAuth(req, res);
+      case 'all-access/jwks.json': {
+        jwksHandler(options, req, res);
+        return;
+      }
+
+      case 'all-access/.well-known/openid-configuration': {
+        openidConfigurationHandler(options, req, res);
+        return;
+      }
+
+      default: {
+        nextAuth(req, res);
+      }
     }
   };
 }
@@ -32,7 +40,7 @@ function NextAuthAllAccessHandler(options: HandlerOptions, nextAuth: any) {
  * Wraps NextAuth with AllAccess code, which adds AllAccess endpoints and inserts
  * access tokens into the session object.
  */
-function NextAuthAllAccess(options: NextAuthAllAccessOptions) {
+function nextAuthAllAccess(options: NextAuthAllAccessOptions) {
   const jwksPath = options.jwksPath ?? process.env['ALLACCESS_JWKS_PATH'];
   const privateKey = options.privateKey ?? process.env['ALLACCESS_PRIVATE_KEY'];
 
@@ -40,32 +48,43 @@ function NextAuthAllAccess(options: NextAuthAllAccessOptions) {
     throw new Error('JWKS file path and private key are required');
   }
 
-  const jwks = JSON.parse(fs.readFileSync(jwksPath, 'utf-8'));
+  const jwks = JSON.parse(fs.readFileSync(jwksPath, 'utf-8')) as unknown;
+
+  if (!isJsonWebKeySet(jwks)) {
+    throw new Error('JWKS file is invalid');
+  }
+
+  const kid = jwks.keys[0]?.kid;
+
+  if (!kid) {
+    throw new Error('JWKS file is invalid');
+  }
+
   const issuer = getIssuer(options.issuer);
 
   const handlerOptions: HandlerOptions = {
     issuer,
     origin: getOrigin(),
-    jwks
+    jwks,
   };
 
-  const signingOptions: CreateSigningFnsParams = {
+  const signingOptions: CreateSigningFnsParameters = {
     clients: options.clients,
-    privateKey: importPKCS8(sanitizeKey(privateKey)),
+    privateKey: importPkcs8(sanitizeKey(privateKey)),
     issuer,
-    kid: jwks.keys[0].kid
+    kid,
   };
 
-  return (NextAuth: (opt: NextAuthOptions) => any, nextAuthOptions: NextAuthOptions) => {
+  return (createNextAuth: (opt: NextAuthOptions) => any, nextAuthOptions: NextAuthOptions) => {
     const sessionCallback = createSessionCallback(signingOptions, nextAuthOptions);
 
     nextAuthOptions.callbacks = {
       ...nextAuthOptions.callbacks,
-      session: sessionCallback
+      session: sessionCallback,
     };
 
-    return NextAuthAllAccessHandler(handlerOptions, NextAuth(nextAuthOptions));
+    return nextAuthAllAccessHandler(handlerOptions, createNextAuth(nextAuthOptions));
   };
 }
 
-export default NextAuthAllAccess;
+export default nextAuthAllAccess;

@@ -4,26 +4,97 @@
   "type": "module",
   "exports": "./dist/index.js",
   "types": "./dist",
+  "bin": {
+    "next-auth-all-access": "./bin/next-auth-all-access.mjs"
+  },
   "scripts": {
     "build": "del-cli dist && tsc",
     "preparex": "npm run build",
     "release": "np",
-    "test": "xo && jest"
+    "test": "eslint src && ava"
+  },
+  "eslintConfig": {
+    "settings": {
+      "mdx/code-blocks": true,
+      "mdx/language-mapper": {}
+    },
+    "plugins": [
+      "json-format"
+    ],
+    "extends": [
+      "xo-space"
+    ],
+    "rules": {
+      "no-console": "error",
+      "no-unreachable": "error"
+    },
+    "overrides": [
+      {
+        "files": [
+          "**/*.{ts,tsx}"
+        ],
+        "extends": [
+          "xo-typescript/space"
+        ]
+      },
+      {
+        "files": [
+          "**/*.{md,mdx}"
+        ],
+        "settings": {
+          "mdx/code-blocks": true,
+          "mdx/language-mapper": {}
+        },
+        "extends": [
+          "plugin:mdx/recommended"
+        ]
+      }
+    ]
+  },
+  "eslintIgnore": [
+    "tsconfig.json",
+    "dist"
+  ],
+  "ava": {
+    "extensions": {
+      "ts": "module"
+    },
+    "files": [
+      "**/*.test.ts"
+    ],
+    "nodeArguments": [
+      "--loader=ts-node/esm"
+    ],
+    "nonSemVerExperiments": {
+      "nextGenConfig": true,
+      "configurableModuleFormat": true
+    },
+    "timeout": "1m"
   },
   "dependencies": {
-    "jose": "^4.8.1"
+    "jose": "^4.8.1",
+    "meow": "^10.1.2"
   },
   "devDependencies": {
     "@types/node": "^14.15.0",
+    "@types/react": "^17.0.2",
+    "@typescript-eslint/eslint-plugin": "^5.23.0",
+    "@typescript-eslint/parser": "^5.23.0",
+    "ava": "^4.2.0",
     "del-cli": "^4.0.1",
+    "eslint": "^8.15.0",
+    "eslint-config-xo-space": "^0.32.0",
+    "eslint-config-xo-typescript": "^0.50.0",
+    "eslint-plugin-json-format": "^2.0.1",
+    "eslint-plugin-mdx": "^1.17.0",
     "next": "^12.1.6",
     "next-auth": "^4.3.4",
     "np": "^7.6.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "ts-node": "^10.7.0",
     "type-fest": "^2.12.2",
-    "typescript": "^4.8.0-dev.20220513",
-    "xo": "^0.48.0"
+    "typescript": "^4.8.0-dev.20220513"
   },
   "peerDependencies": {
     "next-auth": "^4.3.4",

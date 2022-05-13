@@ -1,12 +1,13 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import type { HandlerOptions } from '../types.js';
+import type {NextApiRequest, NextApiResponse} from 'next';
+import type {HandlerOptions} from '../types.js';
 
-const handler = (options: HandlerOptions, _req: NextApiRequest, res: NextApiResponse) => {
-  const { issuer, origin } = options;
+function handler(options: HandlerOptions, _req: NextApiRequest, res: NextApiResponse) {
+  const {issuer, origin} = options;
   res.send({
     issuer,
-    jwks_uri: `${origin}/api/auth/all-access/jwks.json`
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    jwks_uri: `${origin}/api/auth/all-access/jwks.json`,
   });
-};
+}
 
 export default handler;
