@@ -1,4 +1,4 @@
-import type {JSONWebKeySet, JWK} from 'jose';
+import type {JSONWebKeySet} from 'jose';
 import type {SessionContextValue} from 'next-auth/react';
 
 export interface Client {
@@ -29,6 +29,8 @@ export type AllAccessToken = {
 
 export type AllAccessSession = SessionContextValue['data'] & {allAccess: Record<string, AllAccessToken>};
 
-export function isJsonWebKeySet(obj: unknown): obj is JSONWebKeySet {
-  return Boolean(Array.isArray(obj) && obj.keys && (obj.keys as unknown as JWK[]).every(k => k.kid));
+export function isJsonWebKeySet(maybeJwks: unknown): maybeJwks is JSONWebKeySet {
+  const obj = maybeJwks as JSONWebKeySet;
+  return Boolean(Array.isArray(obj?.keys) && obj.keys.every(k => k.kid));
 }
+
