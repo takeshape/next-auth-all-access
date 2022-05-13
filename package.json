@@ -5,7 +5,7 @@
   "exports": "./dist/index.js",
   "types": "./dist",
   "bin": {
-    "next-auth-all-access": "./bin/next-auth-all-access.mjs"
+    "next-auth-all-access": "./bin/next-auth-all-access.js"
   },
   "scripts": {
     "build": "del-cli dist && tsc -p tsconfig.build.json",
