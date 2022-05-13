@@ -9,7 +9,7 @@
   },
   "scripts": {
     "build": "del-cli dist && tsc -p tsconfig.build.json",
-    "preparex": "npm run build",
+    "prepare": "npm run build",
     "release": "np",
     "test": "eslint src && ava"
   },
