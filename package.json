@@ -1,0 +1,36 @@
+{
+  "name": "@takeshape/next-auth-all-access",
+  "version": "0.0.1",
+  "type": "module",
+  "exports": "./dist/index.js",
+  "types": "./dist",
+  "scripts": {
+    "build": "del-cli dist && tsc",
+    "preparex": "npm run build",
+    "release": "np",
+    "test": "xo && jest"
+  },
+  "dependencies": {
+    "jose": "^4.8.1"
+  },
+  "devDependencies": {
+    "@types/node": "^14.15.0",
+    "del-cli": "^4.0.1",
+    "next": "^12.1.6",
+    "next-auth": "^4.3.4",
+    "np": "^7.6.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "type-fest": "^2.12.2",
+    "typescript": "^4.8.0-dev.20220513",
+    "xo": "^0.48.0"
+  },
+  "peerDependencies": {
+    "next-auth": "^4.3.4",
+    "react": "^17.0.2 || ^18",
+    "react-dom": "^17.0.2 || ^18"
+  },
+  "engines": {
+    "node": "^12.19.0 || ^14.15.0 || ^16.13.0"
+  }
+}
