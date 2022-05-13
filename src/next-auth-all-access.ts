@@ -30,7 +30,7 @@ function nextAuthAllAccessHandler(options: HandlerOptions, nextAuth: NextApiHand
       }
 
       default: {
-        nextAuth(req, res);
+        await nextAuth(req, res);
       }
     }
   };
