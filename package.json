@@ -1,6 +1,20 @@
 {
   "name": "@takeshape/next-auth-all-access",
   "version": "0.0.5",
+  "keywords": [
+    "react",
+    "nodejs",
+    "oauth",
+    "jwt",
+    "oauth2",
+    "authentication",
+    "nextjs",
+    "oidc",
+    "nextauth",
+    "api",
+    "jwks",
+    "token"
+  ],
   "type": "module",
   "exports": {
     ".": "./dist/index.js",
@@ -10,6 +24,25 @@
   "bin": {
     "next-auth-all-access": "./bin/next-auth-all-access.js"
   },
+  "files": [
+    "bin/next-auth-all-access.js",
+    "dist/react",
+    "dist/handlers",
+    "dist/index.d.ts",
+    "dist/index.js",
+    "dist/callbacks.d.ts",
+    "dist/callbacks.js",
+    "dist/key.d.ts",
+    "dist/key.js",
+    "dist/next-auth-all-access.d.ts",
+    "dist/next-auth-all-access.js",
+    "dist/token.d.ts",
+    "dist/token.js",
+    "dist/types.d.ts",
+    "dist/types.js",
+    "dist/utils.d.ts",
+    "dist/utils.js"
+  ],
   "scripts": {
     "build": "del-cli dist && tsc -p tsconfig.build.json",
     "prepare": "npm run build",

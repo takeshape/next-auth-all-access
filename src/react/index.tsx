@@ -1,25 +1,20 @@
-import type {SessionContextValue, UseSessionOptions} from 'next-auth/react';
 import {useSession} from 'next-auth/react';
 import {useEffect, useState} from 'react';
-import type {SetOptional} from 'type-fest';
 import type {AllAccessSession, AllAccessToken} from '../types.js';
 
-export interface GetClientTokenOptions {
-  clientId: string;
-  session: SessionContextValue['data'] | undefined;
-}
+import {GetClientTokenOptions, UseAllAccessOptions} from './types.js';
 
+export * from './types.js';
+
+/**
+ * A helper to get the client's token from the NextAuth session.
+ */
 export function getClientToken({clientId, session}: GetClientTokenOptions) {
   if (!session) {
     return;
   }
 
   return (session as AllAccessSession).allAccess?.[clientId];
-}
-
-export interface UseAllAccessOptions
-  extends SetOptional<UseSessionOptions<boolean>, 'required'> {
-  clientId: string;
 }
 
 /**
