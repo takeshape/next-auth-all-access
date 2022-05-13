@@ -14,9 +14,8 @@
     "test": "eslint src && ava"
   },
   "eslintConfig": {
-    "settings": {
-      "mdx/code-blocks": true,
-      "mdx/language-mapper": {}
+    "parserOptions": {
+      "ecmaVersion": 12
     },
     "plugins": [
       "json-format"
@@ -42,7 +41,7 @@
           "**/*.{md,mdx}"
         ],
         "settings": {
-          "mdx/code-blocks": true,
+          "mdx/code-blocks": false,
           "mdx/language-mapper": {}
         },
         "extends": [
