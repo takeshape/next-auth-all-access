@@ -3,6 +3,19 @@
 NextAuthAllAccess wraps NextAuth to provide JWKS verifiable access tokens for
 third-party APIs.
 
+## Provides
+
+* A wrapper for the NextAuth handler, providing configurable, JWKS-verifiable
+client access tokens to be used with third-party APIs that require
+authentication and which you'd rather not wrap in an API route.
+* The endpoint `/api/auth/all-access/jwks.json` with exposes your public JWKS
+for validation of your tokens on third-party servers.
+* The endpoint `/api/auth/all-access/openid-configuration` which is a partial
+[OpenID Connect Discovery](https://swagger.io/docs/specification/authentication/openid-connect-discovery/)
+document specifying the `issuer` and `jwks_uri` properties, so that some
+auto-discovery-compatible clients can find your JWKS URI.
+* Some React utility functions.
+
 ## Installation
 
 ```
@@ -14,7 +27,7 @@ $ npm install @takeshape/next-auth-all-access
 First, use the CLI tool to generate your key pair:
 
 ```
-$ ./node_modules/bin/next-auth-all-access generate-keys
+$ npx @takeshape/next-auth-all-access generate-keys
 ```
 
 Next, import the library and wrap your `NextAuth` instance with it:
@@ -73,9 +86,11 @@ export function MyComponent() {
   const { status, data: session } = useSession();
   const clientToken = getClientToken({ clientId: 'my-api', session });
   // clientToken === { accessToken: '[ACCESS_TOKEN]' }
+  // fetch('https://my-api.com/protected/resource', { headers: { authorization: `Bearer ${clientToken}` } })
 }
 ```
-The is also a hook, which requires the `next-auth/react` `SessionProvider`. It
+
+There is also a hook, which requires the `next-auth/react` `SessionProvider`. It
 will update automatically when the session token changes.
 
 ```typescript
