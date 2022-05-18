@@ -79,7 +79,7 @@ The module exports some helpers for accessing those values, you can use like
 this:
 
 ```typescript
-import { getClientToken } from 'next-auth-all-access/react';
+import { getClientToken } from '@takeshape/next-auth-all-access/react';
 import { useSession } from 'next-auth/react';
 
 export function MyComponent() {
@@ -94,7 +94,7 @@ There is also a hook, which requires the `next-auth/react` `SessionProvider`. It
 will update automatically when the session token changes.
 
 ```typescript
-import { useAllAccess } from 'next-auth-all-access/react';
+import { useAllAccess } from '@takeshape/next-auth-all-access/react';
 
 export function MyComponent() {
   const { isAuthenticated, clientToken } = useAllAccess({ clientId: 'my-api', required: true });
