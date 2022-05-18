@@ -33,7 +33,7 @@ $ npx @takeshape/next-auth-all-access generate-keys
 Next, import the library and wrap your `NextAuth` instance with it:
 
 ```typescript
-import createNextAuthAllAccess from 'next-auth-all-access';
+import createNextAuthAllAccess from '@takeshape/next-auth-all-access';
 import NextAuth from 'next-auth';
 import Auth0Provider from 'next-auth/providers/auth0';
 import path from 'path';
