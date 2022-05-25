@@ -45,7 +45,9 @@ const withAllAccess = createNextAuthAllAccess({
     {
       id: 'my-api',
       audience: 'https://my-api.com/posts',
-      expiration: '6h'
+      expiration: '6h',
+      // Optional whitelist — `exp` and `iat` will always be included
+      allowedClaims: ['email', 'sub']
     }
   ]
 });

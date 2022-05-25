@@ -29,3 +29,7 @@ export function getIssuer(issuer?: string) {
 export function sanitizeKey(key: string) {
   return key.replace(/['|"]/g, '').trim().replace(/\\n/g, '\n');
 }
+
+export function pick(obj: Record<string, unknown>, props: string[]): Record<string, unknown> {
+  return props.reduce((p, c) => ({...p, [c]: obj[c]}), {});
+}

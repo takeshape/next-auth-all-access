@@ -5,6 +5,7 @@ export interface Client {
   id: string;
   audience: string;
   expiration?: string | number;
+  allowedClaims?: string[];
 }
 
 export interface NextAuthAllAccessOptions {
