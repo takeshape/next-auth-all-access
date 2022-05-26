@@ -45,7 +45,7 @@ async function main(cmd, {jwksPath}) {
 Add the following line to your .env file, this is your private key:
 `);
   console.log(
-    `NEXTAUTHOIDC_PRIVATE_KEY='${privateKeyOneLine}'`,
+    `ALLACCESS_PRIVATE_KEY='${privateKeyOneLine}'`,
   );
 
   const publicJwk = await exportJWK(publicKey);
