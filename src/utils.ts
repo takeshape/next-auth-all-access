@@ -33,3 +33,12 @@ export function sanitizeKey(key: string) {
 export function pick(obj: Record<string, unknown>, props: string[]): Record<string, unknown> {
   return props.reduce((p, c) => ({...p, [c]: obj[c]}), {});
 }
+
+export function renameKeys<T extends Record<string, unknown>>(obj: T, newKeys: Record<string, string>): T {
+  const keyValues = Object.keys(obj).map(key => {
+    const newKey = newKeys[key] ?? key;
+    return {[newKey]: obj[key]};
+  });
+
+  return Object.assign({}, ...keyValues) as T;
+}

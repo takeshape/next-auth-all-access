@@ -1,7 +1,7 @@
 import type {KeyLike} from 'jose';
 import {SignJWT} from 'jose';
 import type {AllAccessToken, Client, NextAuthToken} from './types.js';
-import {pick} from './utils.js';
+import {pick, renameKeys} from './utils.js';
 
 interface CreateSignTokenParameters {
   id: string;
@@ -11,12 +11,17 @@ interface CreateSignTokenParameters {
   issuer: string;
   audience: string;
   allowedClaims?: string[];
+  renameClaims?: Record<string, string>;
 }
 
-export function createSigningFn({id, privateKey, expiration, kid, issuer, audience, allowedClaims}: CreateSignTokenParameters) {
+export function createSigningFn({id, privateKey, expiration, kid, issuer, audience, allowedClaims, renameClaims}: CreateSignTokenParameters) {
   return async (token: NextAuthToken): Promise<AllAccessToken> => {
     if (allowedClaims) {
       token = pick(token, ['exp', 'iat', ...allowedClaims]);
+    }
+
+    if (renameClaims) {
+      token = renameKeys(token, renameClaims);
     }
 
     const signed = await new SignJWT(token)
