@@ -56,6 +56,9 @@
     "release": "np",
     "test": "eslint src && ava"
   },
+  "prettier": {
+    "bracketSpacing": false
+  },
   "eslintConfig": {
     "parserOptions": {
       "ecmaVersion": 12
