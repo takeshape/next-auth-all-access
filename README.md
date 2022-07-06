@@ -10,7 +10,7 @@ client access tokens to be used with third-party APIs that require
 authentication and which you'd rather not wrap in an API route.
 * The endpoint `/api/auth/all-access/jwks.json` with exposes your public JWKS
 for validation of your tokens on third-party servers.
-* The endpoint `/api/auth/all-access/openid-configuration` which is a partial
+* The endpoint `/api/auth/all-access/.well-known/openid-configuration` which is a partial
 [OpenID Connect Discovery](https://swagger.io/docs/specification/authentication/openid-connect-discovery/)
 document specifying the `issuer` and `jwks_uri` properties, so that some
 auto-discovery-compatible clients can find your JWKS URI.
