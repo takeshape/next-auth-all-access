@@ -46,7 +46,7 @@ The following line contains your private key. Add this key, using the variable
 name 'ALLACCESS_PRIVATE_KEY' to your environment.
 
 Hint: Quote the private key to ensure the formatting is not altered. For example:
-ALLACCESS_PRIVATE_KEY='-----BEGIN PRIVATE KEY-----\nHEREISTHEKEY\n-----END PRIVATE KEY-----\n'
+ALLACCESS_PRIVATE_KEY='-----BEGIN PRIVATE KEY-----\\nHEREISTHEKEY\\n-----END PRIVATE KEY-----\\n'
 `);
   console.log(
     `${privateKeyOneLine}`,
