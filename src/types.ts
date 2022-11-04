@@ -12,7 +12,7 @@ export interface Client {
 export interface NextAuthAllAccessOptions {
   clients: Client[]
   jwksPath?: string
-  jwks?: JSONWebKeySet
+  jwks?: unknown
   privateKey?: string
   issuer?: string
 }
