@@ -1,5 +1,5 @@
-import test from 'ava'
+import { expect, test } from 'vitest'
 
-test('foo', async (t) => {
-  t.true(true)
+test('foo', async () => {
+  expect('foo').toMatch('foo')
 })

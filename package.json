@@ -52,9 +52,11 @@
   ],
   "scripts": {
     "build": "del-cli dist && tsc -p tsconfig.build.json",
+    "format": "eslint src --fix",
     "prepare": "npm run build",
     "release": "np",
-    "test": "eslint src && ava"
+    "test": "npm run format && vitest run",
+    "watch": "vitest"
   },
   "prettier": {
     "bracketSpacing": true,
@@ -149,12 +151,10 @@
     "meow": "^11.0.0"
   },
   "devDependencies": {
-    "@ava/typescript": "^3.0.1",
     "@types/node": "^18.11.9",
     "@types/react": "^18.0.25",
     "@typescript-eslint/eslint-plugin": "^5.42.0",
     "@typescript-eslint/parser": "^5.42.0",
-    "ava": "^5.0.1",
     "del-cli": "^5.0.0",
     "eslint": "^8.25.0",
     "eslint-config-prettier": "^8.5.0",
@@ -169,9 +169,9 @@
     "prettier": "^2.7.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "ts-node": "^10.9.1",
     "type-fest": "^3.1.0",
-    "typescript": "^4.8.4"
+    "typescript": "^4.8.4",
+    "vitest": "^0.24.5"
   },
   "peerDependencies": {
     "next-auth": "^4.15.1",
