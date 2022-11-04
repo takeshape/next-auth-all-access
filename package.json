@@ -135,17 +135,6 @@
     "tsconfig.json",
     "dist"
   ],
-  "ava": {
-    "extensions": {
-      "ts": "module"
-    },
-    "files": [
-      "src/**/*.test.ts"
-    ],
-    "nodeArguments": [
-      "--loader=ts-node/esm"
-    ]
-  },
   "dependencies": {
     "jose": "^4.10.4",
     "meow": "^11.0.0"
