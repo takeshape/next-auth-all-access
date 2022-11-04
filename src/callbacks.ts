@@ -17,7 +17,6 @@ export function createSessionCallback(
   return async (params) => {
     const { session, token } = params
 
-    // @ts-expect-error Type next-auth
     session['allAccess'] = await signAccessTokens(token)
 
     if (originalSessionCallback) {

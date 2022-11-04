@@ -5,7 +5,6 @@ function handler(options: HandlerOptions, _req: NextApiRequest, res: NextApiResp
   const { issuer, origin } = options
   res.send({
     issuer,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     jwks_uri: `${origin}/api/auth/all-access/jwks.json`,
   })
 }
