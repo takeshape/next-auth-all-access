@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 /* eslint-disable no-console */
 
-import crypto from 'crypto';
-import fs from 'fs';
-import {exportJWK, exportPKCS8, generateKeyPair} from 'jose';
-import meow from 'meow';
-import path from 'path';
+import { exportJWK, exportPKCS8, generateKeyPair } from 'jose'
+import meow from 'meow'
+import crypto from 'node:crypto'
+import fs from 'node:fs'
+import path from 'node:path'
 
 const cli = meow(
   `
@@ -18,9 +18,7 @@ const cli = meow(
   {
     allowUnknownFlags: false,
     importMeta: import.meta,
-    input: [
-      'generate-keys',
-    ],
+    input: ['generate-keys'],
     flags: {
       jwksPath: {
         type: 'string',
@@ -29,17 +27,17 @@ const cli = meow(
       },
     },
   },
-);
+)
 
 function keyToKid(key) {
-  return crypto.createHash('md5').update(key).digest('hex');
+  return crypto.createHash('md5').update(key).digest('hex')
 }
 
-async function main(cmd, {jwksPath}) {
-  const {publicKey, privateKey} = await generateKeyPair('RS256');
+async function main(cmd, { jwksPath }) {
+  const { publicKey, privateKey } = await generateKeyPair('RS256')
 
-  const privateKeyString = await exportPKCS8(privateKey);
-  const privateKeyOneLine = privateKeyString.replace(/\n/g, '\\n');
+  const privateKeyString = await exportPKCS8(privateKey)
+  const privateKeyOneLine = privateKeyString.replace(/\n/g, '\\n')
 
   console.log(`
 The following line contains your private key. Add this key, using the variable 
@@ -47,12 +45,10 @@ name 'ALLACCESS_PRIVATE_KEY' to your environment.
 
 Hint: Quote the private key to ensure the formatting is not altered:
 ALLACCESS_PRIVATE_KEY='-----BEGIN PRIVATE KEY-----\\nHEREISTHEKEY\\n-----END PRIVATE KEY-----\\n'
-`);
-  console.log(
-    `${privateKeyOneLine}`,
-  );
+`)
+  console.log(`${privateKeyOneLine}`)
 
-  const publicJwk = await exportJWK(publicKey);
+  const publicJwk = await exportJWK(publicKey)
 
   const jwks = {
     keys: [
@@ -63,14 +59,14 @@ ALLACCESS_PRIVATE_KEY='-----BEGIN PRIVATE KEY-----\\nHEREISTHEKEY\\n-----END PRI
         kid: keyToKid(publicJwk.n),
       },
     ],
-  };
+  }
 
   console.log(`
 Writing your JWKS file to '${jwksPath}'...
-  `);
+  `)
 
-  fs.mkdirSync(path.dirname(jwksPath), {recursive: true});
-  fs.writeFileSync(jwksPath, `${JSON.stringify(jwks, null, 2)}\n`);
+  fs.mkdirSync(path.dirname(jwksPath), { recursive: true })
+  fs.writeFileSync(jwksPath, `${JSON.stringify(jwks, null, 2)}\n`)
 }
 
-main(cli.input[0], cli.flags);
+main(cli.input[0], cli.flags)

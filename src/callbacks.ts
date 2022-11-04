@@ -1,6 +1,6 @@
-import type {CallbacksOptions, NextAuthOptions} from 'next-auth';
-import type {CreateSigningFnsParameters} from './token.js';
-import {createSigningFns} from './token.js';
+import type { CallbacksOptions, NextAuthOptions } from 'next-auth'
+import type { CreateSigningFnsParameters } from './token.js'
+import { createSigningFns } from './token.js'
 
 /**
  * Creates a session callback wrapper that adds signed tokens for
@@ -10,19 +10,20 @@ export function createSessionCallback(
   signingOptions: CreateSigningFnsParameters,
   nextAuthOptions: NextAuthOptions,
 ): CallbacksOptions['session'] {
-  const signAccessTokens = createSigningFns(signingOptions);
+  const signAccessTokens = createSigningFns(signingOptions)
 
-  const originalSessionCallback = nextAuthOptions.callbacks?.session;
+  const originalSessionCallback = nextAuthOptions.callbacks?.session
 
-  return async params => {
-    const {session, token} = params;
+  return async (params) => {
+    const { session, token } = params
 
-    session['allAccess'] = await signAccessTokens(token);
+    // @ts-expect-error Type next-auth
+    session['allAccess'] = await signAccessTokens(token)
 
     if (originalSessionCallback) {
-      return originalSessionCallback(params);
+      return originalSessionCallback(params)
     }
 
-    return session;
-  };
+    return session
+  }
 }

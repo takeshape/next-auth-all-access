@@ -57,42 +57,75 @@
     "test": "eslint src && ava"
   },
   "prettier": {
-    "bracketSpacing": false
+    "bracketSpacing": true,
+    "jsxSingleQuote": true,
+    "printWidth": 100,
+    "semi": false,
+    "singleQuote": true,
+    "tabWidth": 2,
+    "trailingComma": "all"
   },
   "eslintConfig": {
-    "parserOptions": {
-      "ecmaVersion": 12
+    "env": {
+      "node": true
     },
-    "plugins": [
-      "json-format"
-    ],
+    "parserOptions": {
+      "ecmaVersion": 12,
+      "sourceType": "module"
+    },
+    "settings": {
+      "import/resolver": {
+        "typescript": {}
+      }
+    },
     "extends": [
-      "xo-space"
+      "eslint:recommended",
+      "plugin:prettier/recommended"
     ],
     "rules": {
+      "capitalized-comments": "off",
       "no-console": "error",
       "no-unreachable": "error"
     },
     "overrides": [
       {
         "files": [
-          "**/*.{ts,tsx}"
+          "**/*.ts",
+          "**/*.tsx"
         ],
+        "parser": "@typescript-eslint/parser",
+        "parserOptions": {
+          "ecmaVersion": "latest",
+          "sourceType": "module"
+        },
         "extends": [
-          "xo-typescript/space"
+          "plugin:@typescript-eslint/recommended"
+        ],
+        "rules": {
+          "@typescript-eslint/consistent-type-definitions": "off"
+        }
+      },
+      {
+        "files": [
+          "*.json"
+        ],
+        "plugins": [
+          "json-format"
         ]
       },
       {
         "files": [
-          "**/*.{md,mdx}"
+          "*.mdx",
+          "*.md"
         ],
         "settings": {
           "mdx/code-blocks": false,
           "mdx/language-mapper": {}
         },
-        "extends": [
-          "plugin:mdx/recommended"
-        ]
+        "extends": "plugin:mdx/recommended",
+        "rules": {
+          "indent": "off"
+        }
       }
     ]
   },
@@ -112,37 +145,43 @@
     ]
   },
   "dependencies": {
-    "jose": "^4.8.1",
-    "meow": "^10.1.2"
+    "jose": "^4.10.4",
+    "meow": "^11.0.0"
   },
   "devDependencies": {
     "@ava/typescript": "^3.0.1",
-    "@types/node": "^14.15.0",
-    "@types/react": "^17.0.2",
-    "@typescript-eslint/eslint-plugin": "^5.23.0",
-    "@typescript-eslint/parser": "^5.23.0",
-    "ava": "^4.2.0",
-    "del-cli": "^4.0.1",
-    "eslint": "^8.15.0",
-    "eslint-config-xo-space": "^0.32.0",
-    "eslint-config-xo-typescript": "^0.50.0",
+    "@types/node": "^18.11.9",
+    "@types/react": "^18.0.25",
+    "@typescript-eslint/eslint-plugin": "^5.42.0",
+    "@typescript-eslint/parser": "^5.42.0",
+    "ava": "^5.0.1",
+    "del-cli": "^5.0.0",
+    "eslint": "^8.25.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-import-resolver-typescript": "^3.5.1",
+    "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-json-format": "^2.0.1",
-    "eslint-plugin-mdx": "^1.17.0",
-    "next": "^12.1.6",
-    "next-auth": "^4.3.4",
-    "np": "^7.6.0",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "ts-node": "^10.7.0",
-    "type-fest": "^2.12.2",
-    "typescript": "^4.6.4"
+    "eslint-plugin-mdx": "^2.0.5",
+    "eslint-plugin-prettier": "^4.2.1",
+    "next": "^13.0.2",
+    "next-auth": "^4.15.1",
+    "np": "^7.6.2",
+    "prettier": "^2.7.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "ts-node": "^10.9.1",
+    "type-fest": "^3.1.0",
+    "typescript": "^4.8.4"
   },
   "peerDependencies": {
-    "next-auth": "^4.3.4",
+    "next-auth": "^4.15.1",
     "react": "^17.0.2 || ^18",
     "react-dom": "^17.0.2 || ^18"
   },
   "engines": {
-    "node": "^12.19.0 || ^14.15.0 || ^16.13.0"
+    "node": "^12.19.0 || ^14.15.0 || ^16.13.0 || ^18.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

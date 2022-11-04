@@ -1,6 +1,5 @@
+import test from 'ava'
 
-import test from 'ava';
-
-test('foo', async t => {
-  t.true(true);
-});
+test('foo', async (t) => {
+  t.true(true)
+})
