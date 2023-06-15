@@ -22,7 +22,7 @@ const cli = meow(
     flags: {
       jwksPath: {
         type: 'string',
-        alias: 'p',
+        shortFlag: 'p',
         default: './keys/jwks.json',
       },
     },
@@ -47,10 +47,9 @@ environment settings.
   console.log(privateKeyString)
 
   console.log(`
-The following line contains your private key as a single-line string. This is 
-suitable for pasting into a local .env file.
+The following line contains your private key as a single-line string with 
+variable assignment. This is suitable for pasting into a local .env file.
 
-Hint: Quote the private key to ensure the formatting is not altered:
 ALLACCESS_PRIVATE_KEY='${privateKeyOneLine}'
 `)
 
