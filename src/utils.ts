@@ -13,10 +13,14 @@ export function getJwksKid(key: string) {
   )
 }
 
-const vercelUrl = process.env['VERCEL_URL'] ? `https://${process.env['VERCEL_URL']}` : null
+function getVercelUrl() {
+  return process.env['VERCEL_URL'] ? `https://${process.env['VERCEL_URL']}` : null
+}
 
-export function getOrigin() {
-  const url = new URL(process.env.NEXTAUTH_URL ?? vercelUrl ?? 'http://localhost:3000/')
+export function getOrigin(origin?: string) {
+  const url = new URL(
+    origin ?? process.env.NEXTAUTH_URL ?? getVercelUrl() ?? 'http://localhost:3000/',
+  )
   return url.origin
 }
 

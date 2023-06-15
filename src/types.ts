@@ -15,6 +15,7 @@ export interface NextAuthAllAccessOptions {
   jwks?: unknown
   privateKey?: string
   issuer?: string
+  origin?: string
 }
 
 export interface HandlerOptions {

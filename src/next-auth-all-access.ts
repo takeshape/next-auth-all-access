@@ -71,7 +71,7 @@ function nextAuthAllAccess(options: NextAuthAllAccessOptions) {
 
   const handlerOptions: HandlerOptions = {
     issuer,
-    origin: getOrigin(),
+    origin: getOrigin(options.origin),
     jwks,
   }
 
