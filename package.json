@@ -52,10 +52,12 @@
   ],
   "scripts": {
     "build": "del-cli dist && tsc -p tsconfig.build.json",
+    "ci": "vitest run",
     "format": "eslint src --fix",
     "prepare": "npm run build",
-    "release": "np",
-    "test": "npm run format && vitest run",
+    "release": "np --no-publish",
+    "test": "npm run format && npm run typecheck && vitest run",
+    "typecheck": "tsc --noEmit",
     "watch": "vitest"
   },
   "prettier": {
@@ -81,8 +83,7 @@
       }
     },
     "extends": [
-      "eslint:recommended",
-      "plugin:prettier/recommended"
+      "eslint:recommended"
     ],
     "rules": {
       "capitalized-comments": "off",
@@ -90,6 +91,14 @@
       "no-unreachable": "error"
     },
     "overrides": [
+      {
+        "files": [
+          "**/*.js"
+        ],
+        "extends": [
+          "plugin:prettier/recommended"
+        ]
+      },
       {
         "files": [
           "**/*.ts",
@@ -101,7 +110,8 @@
           "sourceType": "module"
         },
         "extends": [
-          "plugin:@typescript-eslint/recommended"
+          "plugin:@typescript-eslint/recommended",
+          "plugin:prettier/recommended"
         ],
         "rules": {
           "@typescript-eslint/no-explicit-any": "off"
