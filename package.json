@@ -55,7 +55,7 @@
     "ci": "vitest run",
     "format": "eslint src --fix",
     "prepare": "npm run build",
-    "release": "np --no-publish",
+    "release": "np --release-draft-only",
     "test": "npm run format && npm run typecheck && vitest run",
     "typecheck": "tsc --noEmit",
     "watch": "vitest"
