@@ -40,13 +40,19 @@ async function main(cmd, { jwksPath }) {
   const privateKeyOneLine = privateKeyString.replace(/\n/g, '\\n')
 
   console.log(`
-The following line contains your private key. Add this key, using the variable 
-name 'ALLACCESS_PRIVATE_KEY' to your environment.
+Here is your unaltered private key. This can be pasted directly into your Vercel
+environment settings.
+`)
+
+  console.log(privateKeyString)
+
+  console.log(`
+The following line contains your private key as a single-line string. This is 
+suitable for pasting into a local .env file.
 
 Hint: Quote the private key to ensure the formatting is not altered:
-ALLACCESS_PRIVATE_KEY='-----BEGIN PRIVATE KEY-----\\nHEREISTHEKEY\\n-----END PRIVATE KEY-----\\n'
+ALLACCESS_PRIVATE_KEY='${privateKeyOneLine}'
 `)
-  console.log(`${privateKeyOneLine}`)
 
   const publicJwk = await exportJWK(publicKey)
 
