@@ -15,6 +15,7 @@
     "jwks",
     "token"
   ],
+  "repository": "takeshape/next-auth-all-access",
   "type": "module",
   "exports": {
     ".": "./dist/index.js",
@@ -55,7 +56,7 @@
     "ci": "vitest run",
     "format": "eslint src --fix",
     "prepare": "npm run build",
-    "release": "np --release-draft-only",
+    "release": "np --no-publish",
     "test": "npm run format && npm run typecheck && vitest run",
     "typecheck": "tsc --noEmit",
     "watch": "vitest"
