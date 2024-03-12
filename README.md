@@ -1,7 +1,6 @@
 # NextAuthAllAccess
 
-NextAuthAllAccess wraps NextAuth to provide JWKS verifiable access tokens for
-third-party APIs.
+NextAuthAllAccess wraps NextAuth to provide JWKS verifiable access tokens for third-party APIs.
 
 ## Provides
 
@@ -53,7 +52,7 @@ const withAllAccess = createNextAuthAllAccess({
         foo: 'bar',
       },
     },
-  ],
+  ]
 })
 
 export default withAllAccess(NextAuth, {
@@ -89,10 +88,10 @@ import { getClientToken } from '@takeshape/next-auth-all-access/react'
 import { useSession } from 'next-auth/react'
 
 export function MyComponent() {
-  const { status, data: session } = useSession()
+  const { data: session } = useSession()
   const clientToken = getClientToken({ clientId: 'my-api', session })
   // clientToken === { accessToken: '[ACCESS_TOKEN]' }
-  // fetch('https://my-api.com/protected/resource', { headers: { authorization: `Bearer ${clientToken}` } })
+  fetch('https://my-api.com/protected/resource', { headers: { authorization: `Bearer ${clientToken}` } })
 }
 ```
 
@@ -106,5 +105,8 @@ export function MyComponent() {
   const { isAuthenticated, clientToken } = useAllAccess({ clientId: 'my-api', required: true })
   // isAuthenticated === true
   // clientToken === { accessToken: '[ACCESS_TOKEN]' }
+  if (isAuthenticated) {
+    fetch('https://my-api.com/protected/resource', { headers: { authorization: `Bearer ${clientToken}` } })
+  }
 }
 ```
