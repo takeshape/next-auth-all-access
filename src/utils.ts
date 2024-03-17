@@ -19,7 +19,7 @@ function getVercelUrl() {
 
 export function getOrigin(origin?: string) {
   const url = new URL(
-    origin ?? process.env.NEXTAUTH_URL ?? getVercelUrl() ?? 'http://localhost:3000/',
+    origin ?? process.env['NEXTAUTH_URL'] ?? getVercelUrl() ?? 'http://localhost:3000/',
   )
   return url.origin
 }
