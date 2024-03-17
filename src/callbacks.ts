@@ -1,4 +1,5 @@
-import type { CallbacksOptions, NextAuthOptions } from 'next-auth'
+import type { CallbacksOptions } from '@auth/core/types'
+import type { NextAuthConfig } from 'next-auth'
 import type { CreateSigningFnsParameters } from './token.js'
 import { createSigningFns } from './token.js'
 
@@ -8,7 +9,7 @@ import { createSigningFns } from './token.js'
  */
 export function createSessionCallback(
   signingOptions: CreateSigningFnsParameters,
-  nextAuthOptions: NextAuthOptions,
+  nextAuthOptions: NextAuthConfig,
 ): CallbacksOptions['session'] {
   const signAccessTokens = createSigningFns(signingOptions)
 
