@@ -23,8 +23,8 @@
   "exports": {
     ".": "./dist/index.js",
     "./react": "./dist/react/index.js",
-    "./app": "./dist/app/index.js",
-    "./pages": "./dist/pages/index.js"
+    "./v5": "./dist/v5/index.js",
+    "./v4": "./dist/v4/index.js"
   },
   "types": "./dist",
   "typesVersions": {
@@ -32,11 +32,11 @@
       "react": [
         "dist/react/index.d.ts"
       ],
-      "app": [
-        "dist/app/index.d.ts"
+      "v5": [
+        "dist/v5/index.d.ts"
       ],
-      "pages": [
-        "dist/pages/index.d.ts"
+      "v4": [
+        "dist/v4/index.d.ts"
       ]
     }
   },
@@ -61,8 +61,8 @@
     "dist/types.js",
     "dist/utils.d.ts",
     "dist/utils.js",
-    "dist/app",
-    "dist/pages"
+    "dist/v5",
+    "dist/v4"
   ],
   "scripts": {
     "build": "del-cli dist && tsc -p tsconfig.build.json",

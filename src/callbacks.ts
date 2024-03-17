@@ -9,7 +9,7 @@ import { createSigningFns } from './token.js'
  */
 export function createSessionCallback(
   signingOptions: CreateSigningFnsParameters,
-  nextAuthOptions: NextAuthConfig,
+  nextAuthOptions: Pick<NextAuthConfig, 'callbacks'>,
 ): CallbacksOptions['session'] {
   const signAccessTokens = createSigningFns(signingOptions)
 
