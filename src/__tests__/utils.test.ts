@@ -3,7 +3,7 @@ import { getOrigin } from '../utils'
 
 describe('getOrigin', () => {
   beforeEach(() => {
-    delete process.env.NEXTAUTH_URL
+    delete process.env['NEXTAUTH_URL']
     delete process.env['VERCEL_URL']
   })
 
@@ -15,7 +15,7 @@ describe('getOrigin', () => {
   })
 
   it('supports a NEXTAUTH_URL origin', () => {
-    process.env.NEXTAUTH_URL = userOrigin
+    process.env['NEXTAUTH_URL'] = userOrigin
     const origin = getOrigin()
     expect(origin).toEqual(userOrigin)
   })
