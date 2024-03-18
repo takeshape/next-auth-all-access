@@ -23,8 +23,7 @@
   "exports": {
     ".": "./dist/index.js",
     "./react": "./dist/react/index.js",
-    "./v5": "./dist/v5/index.js",
-    "./v4": "./dist/v4/index.js"
+    "./v5": "./dist/v5/index.js"
   },
   "types": "./dist",
   "typesVersions": {
@@ -34,9 +33,6 @@
       ],
       "v5": [
         "dist/v5/index.d.ts"
-      ],
-      "v4": [
-        "dist/v4/index.d.ts"
       ]
     }
   },

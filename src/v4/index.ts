@@ -40,14 +40,12 @@ function wrapNextAuth(options: HandlerOptions, nextAuth: NextApiHandler): NextAp
 export const createNextAuthAllAccess = (options: NextAuthAllAccessOptions) => {
   const { handlerOptions, signingOptions } = createInitializerOptions(options)
 
-  return (
-    createNextAuth: (options: Pick<NextAuthConfig, 'callbacks'>) => any,
-    nextAuthOptions: Pick<NextAuthConfig, 'callbacks'>,
-  ): NextApiHandler => {
-    const sessionCallback = createSessionCallback(signingOptions, nextAuthOptions)
+  return (createNextAuth: (options: unknown) => any, nextAuthOptions: unknown): NextApiHandler => {
+    const config = nextAuthOptions as NextAuthConfig
+    const sessionCallback = createSessionCallback(signingOptions, config)
 
-    nextAuthOptions.callbacks = {
-      ...nextAuthOptions.callbacks,
+    config.callbacks = {
+      ...config.callbacks,
       session: sessionCallback,
     }
 

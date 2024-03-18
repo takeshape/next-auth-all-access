@@ -1,54 +1,46 @@
-import type NextAuth from 'next-auth'
-import type { NextAuthConfig, NextAuthResult } from 'next-auth'
+import type { NextAuthConfig } from 'next-auth'
 import type { NextRequest } from 'next/server'
 import { createSessionCallback } from '../callbacks.js'
 import jwksHandler from '../handlers/jwks.js'
 import openidConfigurationHandler from '../handlers/openid-configuration.js'
 import { createInitializerOptions } from '../next-auth-all-access.js'
-import type { HandlerOptions, NextAuthAllAccessOptions } from '../types.js'
+import type { NextAuthAllAccessOptions } from '../types.js'
 
 /**
- * Wrap NextAuth returning a v5-style `NextAuthResult`
+ * Return an updated `NextAuthConfig`, compatible with NextAuth v5
  */
-function wrapNextAuth(options: HandlerOptions, nextAuth: NextAuthResult) {
-  const { GET } = nextAuth.handlers
+export default function createNextAuthAllAccess(options: NextAuthAllAccessOptions) {
+  const { handlerOptions, signingOptions } = createInitializerOptions(options)
 
-  const getWrapper = async (req: NextRequest) => {
+  const GET = async (req: NextRequest) => {
     const { pathname } = req.nextUrl
 
     if (pathname.endsWith('all-access/jwks.json')) {
-      const response = jwksHandler(options)
+      const response = jwksHandler(handlerOptions)
       return Response.json(response)
     }
 
     if (pathname.endsWith('all-access/.well-known/openid-configuration')) {
-      const response = openidConfigurationHandler(options)
+      const response = openidConfigurationHandler(handlerOptions)
       return Response.json(response)
     }
 
-    return GET(req)
+    return new Response(null, { status: 404 })
   }
 
-  return {
-    ...nextAuth,
-    handlers: {
-      ...nextAuth.handlers,
-      GET: getWrapper,
-    },
-  }
-}
+  const withAllAccess = (nextAuthConfig: NextAuthConfig) => {
+    const sessionCallback = createSessionCallback(signingOptions, nextAuthConfig)
 
-export const createNextAuthAllAccess = (options: NextAuthAllAccessOptions) => {
-  const { handlerOptions, signingOptions } = createInitializerOptions(options)
-
-  return (createNextAuth: typeof NextAuth, nextAuthOptions: NextAuthConfig): NextAuthResult => {
-    const sessionCallback = createSessionCallback(signingOptions, nextAuthOptions)
-
-    nextAuthOptions.callbacks = {
-      ...nextAuthOptions.callbacks,
+    nextAuthConfig.callbacks = {
+      ...nextAuthConfig.callbacks,
       session: sessionCallback,
     }
 
-    return wrapNextAuth(handlerOptions, createNextAuth(nextAuthOptions))
+    return nextAuthConfig
+  }
+
+  return {
+    handlers: { GET },
+    withAllAccess,
   }
 }
