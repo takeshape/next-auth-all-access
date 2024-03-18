@@ -15,12 +15,12 @@ export default function createNextAuthAllAccess(options: NextAuthAllAccessOption
   const GET = async (req: NextRequest) => {
     const { pathname } = req.nextUrl
 
-    if (pathname.endsWith('all-access/jwks.json')) {
+    if (pathname.endsWith('/jwks.json')) {
       const response = jwksHandler(handlerOptions)
       return Response.json(response)
     }
 
-    if (pathname.endsWith('all-access/.well-known/openid-configuration')) {
+    if (pathname.endsWith('/.well-known/openid-configuration')) {
       const response = openidConfigurationHandler(handlerOptions)
       return Response.json(response)
     }
