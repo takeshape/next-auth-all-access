@@ -29,17 +29,20 @@ First, use the CLI tool to generate your key pair:
 $ npx @takeshape/next-auth-all-access generate-keys
 ```
 
-Next, import the library and wrap your `NextAuth` instance with it:
+### Using `next-auth` v4 and the `pages` folder
+
+Import the library and wrap your `NextAuth` instance with it:
 
 ```typescript
 import createNextAuthAllAccess from '@takeshape/next-auth-all-access'
 import NextAuth from 'next-auth'
 import Auth0Provider from 'next-auth/providers/auth0'
-import path from 'path'
+import jwks from '../../keys/jwks.json';
 
 const withAllAccess = createNextAuthAllAccess({
   issuer: 'https://example.com/',
-  jwksPath: path.resolve(process.cwd(), './keys/jwks.json'),
+  origin: 'https://example.com/',
+  jwks,
   clients: [
     {
       id: 'my-api',
@@ -65,6 +68,66 @@ export default withAllAccess(NextAuth, {
   ],
 })
 ```
+
+### Using `next-auth` v5 and the `app` folder
+
+> [!IMPORTANT]
+> When using this with `next-auth` v5, in version 1.1.0 and above, you will 
+> need to create a separate route for the all-access API endpoints. Earlier 
+> versions would register these under the `next-auth` route.
+
+Create your `next-auth-all-access` instance and export it:
+
+```typescript title=app/auth-all-access.ts
+import createNextAuthAllAccess from '@takeshape/next-auth-all-access/v5';
+import jwks from '../../keys/jwks.json';
+
+export const {
+  handlers: { GET },
+  withAllAccess
+} = createNextAuthAllAccess({
+  issuer: 'https://example.com/',
+  origin: 'https://example.com/',
+  jwks,
+  clients: [
+    {
+      id: 'my-api',
+      audience: 'https://my-api.com/posts',
+      expiration: '6h',
+      // Optional whitelist — `exp` and `iat` will always be included
+      allowedClaims: ['email', 'sub'],
+      // Optional rename
+      renameClaims: {
+        foo: 'bar',
+      },
+    },
+  ]
+});
+```
+
+```typescript title=app/auth.ts
+import Auth0Provider from 'next-auth/providers/auth0'
+import { withAllAccess } from './auth-all-access';
+
+export const {
+  handlers: { GET, POST },
+  auth
+} = NextAuth(withAllAccess({
+  providers: [
+    Auth0Provider({
+      clientId: process.env.AUTH0_ID,
+      clientSecret: process.env.AUTH0_SECRET,
+      issuer: process.env.AUTH0_ISSUER,
+    }),
+  ]
+}));
+```
+
+```typescript title=app/api/oidc/[...allaccess]/route.ts
+export { GET } from '@/lib/auth-all-access';
+```
+
+## Client Integration
 
 `NextAuthAllAccess` will add any configured client tokens to the session object
 under the `allAccess` property. In the example above your session would contain
