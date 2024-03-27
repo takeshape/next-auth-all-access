@@ -1,10 +1,11 @@
 import type { HandlerOptions } from '../types.js'
 
 function handler(options: HandlerOptions) {
-  const { issuer, origin } = options
+  const { issuer, origin, jwksUriBaseUrl } = options
   return {
     issuer,
-    jwks_uri: `${origin}/api/auth/all-access/jwks.json`,
+    // TODO Need to sniff this or at least make it configurable
+    jwks_uri: `${origin}/${jwksUriBaseUrl}/jwks.json`,
   }
 }
 

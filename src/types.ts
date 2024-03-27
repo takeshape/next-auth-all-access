@@ -16,10 +16,12 @@ export interface NextAuthAllAccessOptions {
   privateKey?: string
   issuer?: string
   origin?: string
+  jwksUriBaseUrl?: string
 }
 
 export interface HandlerOptions {
   jwks: JSONWebKeySet
+  jwksUriBaseUrl: string
   issuer: string
   origin: string
 }
