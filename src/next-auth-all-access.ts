@@ -38,7 +38,7 @@ export function createInitializerOptions(options: NextAuthAllAccessOptions) {
     issuer,
     origin: getOrigin(options.origin),
     jwks,
-    jwksUriBaseUrl: options.jwksUriBaseUrl ?? 'oidc',
+    jwksUriBaseUrl: options.jwksUriBaseUrl ?? 'api/oidc',
   }
 
   const signingOptions: CreateSigningFnsParameters = {
