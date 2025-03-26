@@ -9,10 +9,12 @@ export interface CreateSigningFnParameters {
   kid: string
 }
 
+export type SigningFunction = (token: AuthToken) => Promise<AllAccessToken>
+
 export function createSigningFn(
   { privateKey, kid, issuer }: CreateSigningFnParameters,
   client: Client,
-) {
+): SigningFunction {
   const { id, expiration, audience, allowedClaims, renameClaims } = client
   return async (token: AuthToken): Promise<AllAccessToken> => {
     if (allowedClaims) {
