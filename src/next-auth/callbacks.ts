@@ -1,4 +1,4 @@
-import type { CallbacksOptions } from '@auth/core/types'
+import type { AuthConfig } from '@auth/core'
 import type { NextAuthConfig } from 'next-auth'
 import type { CreateSigningFnsParameters } from '../lib/index.ts'
 import { createSigningFns } from '../lib/index.ts'
@@ -10,7 +10,7 @@ import { createSigningFns } from '../lib/index.ts'
 export function createSessionCallback(
   signingOptions: CreateSigningFnsParameters,
   nextAuthOptions: Pick<NextAuthConfig, 'callbacks'>,
-): CallbacksOptions['session'] {
+): NonNullable<AuthConfig['callbacks']>['session'] {
   const signAccessTokens = createSigningFns(signingOptions)
 
   const originalSessionCallback = nextAuthOptions.callbacks?.session
