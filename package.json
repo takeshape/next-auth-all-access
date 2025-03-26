@@ -26,16 +26,16 @@
       "default": "./dist/index.js"
     },
     "./react": {
-      "types": "./dist/react/index.d.ts",
-      "default": "./dist/react/index.js"
+      "types": "./dist/next-auth/react/index.d.ts",
+      "default": "./dist/next-auth/react/index.js"
     },
     "./v4": {
-      "types": "./dist/v4/index.d.ts",
-      "default": "./dist/v4/index.js"
+      "types": "./dist/next-auth/v4/index.d.ts",
+      "default": "./dist/next-auth/v4/index.js"
     },
     "./v5": {
-      "types": "./dist/v5/index.d.ts",
-      "default": "./dist/v5/index.js"
+      "types": "./dist/next-auth/v5/index.d.ts",
+      "default": "./dist/next-auth/v5/index.js"
     },
     "./lib": {
       "types": "./dist/lib/index.d.ts",
@@ -52,8 +52,9 @@
     "dist"
   ],
   "scripts": {
-    "build": "del-cli dist && tsc -p tsconfig.build.json",
+    "build": "npm run clean && tsc -p tsconfig.build.json",
     "ci": "vitest run",
+    "clean": "del-cli dist *.tsbuildinfo",
     "format": "eslint src --fix",
     "prepare": "npm run build",
     "release": "np --no-publish",
@@ -172,7 +173,7 @@
     "react-dom": "^18.2.0",
     "type-fest": "^4.12.0",
     "typescript": "^5.8.2",
-    "vitest": "^1.3.1"
+    "vitest": "^3.0.9"
   },
   "peerDependencies": {
     "next-auth": "^4.22.1 || ^5 || ^5.0.0-beta",

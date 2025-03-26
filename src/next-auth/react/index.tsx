@@ -1,7 +1,7 @@
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
-import type { AllAccessSession, AllAccessToken } from '../types.ts'
-import { GetClientTokenOptions, UseAllAccessOptions } from './types.ts'
+import type { AllAccessToken } from '../../types.ts'
+import { AllAccessSession, GetClientTokenOptions, UseAllAccessOptions } from './types.ts'
 
 export * from './types.ts'
 

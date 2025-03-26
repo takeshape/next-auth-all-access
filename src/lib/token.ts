@@ -1,6 +1,6 @@
 import type { KeyLike } from 'jose'
 import { SignJWT } from 'jose'
-import type { AllAccessToken, Client, NextAuthToken } from '../types.ts'
+import type { AllAccessToken, AuthToken, Client } from '../types.ts'
 import { pick, renameKeys } from './utils.ts'
 
 interface CreateSignTokenParameters {
@@ -24,7 +24,7 @@ export function createSigningFn({
   allowedClaims,
   renameClaims,
 }: CreateSignTokenParameters) {
-  return async (token: NextAuthToken): Promise<AllAccessToken> => {
+  return async (token: AuthToken): Promise<AllAccessToken> => {
     if (allowedClaims) {
       token = pick(token, ['exp', 'iat', ...allowedClaims])
     }
@@ -66,7 +66,7 @@ export function createSigningFns({ clients, privateKey, issuer, kid }: CreateSig
     }),
   )
 
-  return async (token: NextAuthToken) => {
+  return async (token: AuthToken) => {
     const signedTokens = await Promise.all(accessTokenSigningFns.map(async (fn) => fn(token)))
     return Object.fromEntries(signedTokens.map((v) => [v.id, v]))
   }

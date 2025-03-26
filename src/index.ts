@@ -1,1 +1,1 @@
-export { createNextAuthAllAccess as default } from './v4/index.js'
+export { createNextAuthAllAccess as default } from './next-auth/v4/index.js'

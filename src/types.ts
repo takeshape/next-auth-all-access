@@ -1,5 +1,4 @@
 import type { JSONWebKeySet } from 'jose'
-import type { SessionContextValue } from 'next-auth/react'
 
 export interface Client {
   id: string
@@ -26,13 +25,9 @@ export interface HandlerOptions {
   origin: string
 }
 
-export type NextAuthToken = Record<string, unknown>
+export type AuthToken = Record<string, unknown>
 
 export type AllAccessToken = {
   id: string
   accessToken: string
-}
-
-export type AllAccessSession = SessionContextValue['data'] & {
-  allAccess: Record<string, AllAccessToken>
 }
