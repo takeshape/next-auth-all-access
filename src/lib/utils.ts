@@ -1,5 +1,6 @@
 import { JSONWebKeySet } from 'jose'
 import crypto from 'node:crypto'
+import { JWKS } from '../types.ts'
 
 /**
  * Derive a JWKS Key ID an md5 of the key being identified.
@@ -51,7 +52,7 @@ export function renameKeys<T extends Record<string, unknown>>(
   return Object.assign({}, ...keyValues) as T
 }
 
-export function isJsonWebKeySet(maybeJwks: unknown): maybeJwks is JSONWebKeySet {
+export function isJsonWebKeySet(maybeJwks: unknown): maybeJwks is JWKS {
   const obj = maybeJwks as JSONWebKeySet
-  return Boolean(Array.isArray(obj?.keys) && obj.keys.every((k) => k.kid))
+  return Boolean(Array.isArray(obj?.keys) && obj.keys.length && obj.keys.every((k) => k.kid))
 }

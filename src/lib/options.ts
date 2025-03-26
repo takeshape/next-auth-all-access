@@ -4,48 +4,75 @@ import { importPkcs8 } from './key.ts'
 import type { CreateSigningFnsParameters } from './token.ts'
 import { getIssuer, getOrigin, isJsonWebKeySet, sanitizeKey } from './utils.ts'
 
-export function createInitializerOptions(options: NextAuthAllAccessOptions) {
-  const _jwks = options.jwks
-  const jwksPath = options.jwksPath ?? process.env['ALLACCESS_JWKS_PATH']
-  const privateKey = options.privateKey ?? process.env['ALLACCESS_PRIVATE_KEY']
+export function getJwks(options: Pick<NextAuthAllAccessOptions, 'jwks' | 'jwksPath'>) {
+  const { jwks, jwksPath = process.env['ALLACCESS_JWKS_PATH'] } = options
 
-  if ((!jwksPath && !_jwks) || !privateKey) {
-    throw new Error('JWKS file path and private key are required')
+  if (!jwksPath && !jwks) {
+    throw new Error('jwks or jwksPath are required')
   }
 
-  let jwks
+  let validJwks: unknown
 
-  if (jwksPath) {
-    jwks = JSON.parse(fs.readFileSync(jwksPath, 'utf-8')) as unknown
-  } else {
-    jwks = _jwks
+  if (jwks) {
+    validJwks = jwks
+  } else if (jwksPath) {
+    validJwks = JSON.parse(fs.readFileSync(jwksPath, 'utf-8'))
   }
 
-  if (!isJsonWebKeySet(jwks)) {
-    throw new Error('JWKS file is invalid')
+  if (!isJsonWebKeySet(validJwks)) {
+    throw new Error('JWKS is invalid')
   }
 
-  const kid = jwks.keys[0]?.kid
+  return validJwks
+}
 
-  if (!kid) {
-    throw new Error('JWKS file is invalid')
+export function createSigningOptions(
+  options: Pick<
+    NextAuthAllAccessOptions,
+    'issuer' | 'clients' | 'privateKey' | 'jwks' | 'jwksPath'
+  >,
+): CreateSigningFnsParameters {
+  const {
+    clients,
+    issuer = getIssuer(),
+    privateKey = process.env['ALLACCESS_PRIVATE_KEY'],
+  } = options
+  const jwks = getJwks(options)
+
+  if (!privateKey) {
+    throw new Error('privateKey is required')
   }
 
-  const issuer = getIssuer(options.issuer)
-
-  const handlerOptions: HandlerOptions = {
+  return {
+    clients,
+    privateKey: importPkcs8(sanitizeKey(privateKey)),
     issuer,
-    origin: getOrigin(options.origin),
+    kid: jwks.keys[0].kid,
+  }
+}
+
+export function createHandlerOptions(
+  options: Pick<
+    NextAuthAllAccessOptions,
+    'issuer' | 'origin' | 'jwks' | 'jwksPath' | 'jwksUriBaseUrl'
+  >,
+): HandlerOptions {
+  const { issuer = getIssuer() } = options
+  const jwks = getJwks(options)
+  const origin = getOrigin(options.origin)
+
+  return {
+    issuer,
+    origin,
     jwks,
     jwksUriBaseUrl: options.jwksUriBaseUrl ?? 'api/oidc',
   }
+}
 
-  const signingOptions: CreateSigningFnsParameters = {
-    clients: options.clients,
-    privateKey: importPkcs8(sanitizeKey(privateKey)),
-    issuer,
-    kid,
+export function createInitializerOptions(options: NextAuthAllAccessOptions) {
+  const jwks = getJwks(options)
+  return {
+    handlerOptions: createHandlerOptions({ ...options, jwks }),
+    signingOptions: createSigningOptions({ ...options, jwks }),
   }
-
-  return { handlerOptions, signingOptions }
 }

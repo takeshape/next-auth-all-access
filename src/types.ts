@@ -1,4 +1,5 @@
-import type { JSONWebKeySet } from 'jose'
+import type { JWK } from 'jose'
+import { SetRequired } from 'type-fest'
 
 export interface Client {
   id: string
@@ -18,8 +19,13 @@ export interface NextAuthAllAccessOptions {
   jwksUriBaseUrl?: string
 }
 
+export type NonEmptyArray<T> = T[] & { 0: T }
+
+export type JWKS = {
+  keys: NonEmptyArray<SetRequired<JWK, 'kid'>>
+}
 export interface HandlerOptions {
-  jwks: JSONWebKeySet
+  jwks: JWKS
   jwksUriBaseUrl: string
   issuer: string
   origin: string
