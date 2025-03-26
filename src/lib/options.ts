@@ -1,9 +1,8 @@
 import fs from 'node:fs'
-import { importPkcs8 } from './key.js'
-import type { CreateSigningFnsParameters } from './token.js'
-import type { HandlerOptions, NextAuthAllAccessOptions } from './types.js'
-import { isJsonWebKeySet } from './types.js'
-import { getIssuer, getOrigin, sanitizeKey } from './utils.js'
+import type { HandlerOptions, NextAuthAllAccessOptions } from '../types.ts'
+import { importPkcs8 } from './key.ts'
+import type { CreateSigningFnsParameters } from './token.ts'
+import { getIssuer, getOrigin, isJsonWebKeySet, sanitizeKey } from './utils.ts'
 
 export function createInitializerOptions(options: NextAuthAllAccessOptions) {
   const _jwks = options.jwks

@@ -1,6 +1,11 @@
-import type { UseSessionOptions } from 'next-auth/lib/client'
 import type { SessionContextValue } from 'next-auth/react'
 import type { SetOptional } from 'type-fest'
+
+export interface UseSessionOptions<R extends boolean> {
+  required: R
+  /** Defaults to `signIn` */
+  onUnauthenticated?: () => void
+}
 
 export interface GetClientTokenOptions {
   clientId: string

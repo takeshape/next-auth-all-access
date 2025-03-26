@@ -1,7 +1,7 @@
 import type { KeyLike } from 'jose'
 import { SignJWT } from 'jose'
-import type { AllAccessToken, Client, NextAuthToken } from './types.js'
-import { pick, renameKeys } from './utils.js'
+import type { AllAccessToken, Client, NextAuthToken } from '../types.ts'
+import { pick, renameKeys } from './utils.ts'
 
 interface CreateSignTokenParameters {
   id: string

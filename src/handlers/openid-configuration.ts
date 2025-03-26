@@ -1,4 +1,4 @@
-import type { HandlerOptions } from '../types.js'
+import type { HandlerOptions } from '../types.ts'
 
 function handler(options: HandlerOptions) {
   const { issuer, origin, jwksUriBaseUrl } = options

@@ -1,8 +1,7 @@
-import { DefaultSession } from 'next-auth'
-import { AllAccessToken } from './types'
+import type { AllAccessToken } from './types.ts'
 
-declare module 'next-auth' {
+declare module '@auth/core/types' {
   interface Session extends DefaultSession {
-    allAccess: Record<string, AllAccessToken>
+    allAccess?: Record<string, AllAccessToken>
   }
 }

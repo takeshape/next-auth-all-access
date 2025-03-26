@@ -1,10 +1,9 @@
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
-import type { AllAccessSession, AllAccessToken } from '../types.js'
+import type { AllAccessSession, AllAccessToken } from '../types.ts'
+import { GetClientTokenOptions, UseAllAccessOptions } from './types.ts'
 
-import { GetClientTokenOptions, UseAllAccessOptions } from './types.js'
-
-export * from './types.js'
+export * from './types.ts'
 
 /**
  * A helper to get the client's token from the NextAuth session.

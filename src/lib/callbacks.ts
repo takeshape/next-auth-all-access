@@ -1,7 +1,7 @@
 import type { CallbacksOptions } from '@auth/core/types'
 import type { NextAuthConfig } from 'next-auth'
-import type { CreateSigningFnsParameters } from './token.js'
-import { createSigningFns } from './token.js'
+import type { CreateSigningFnsParameters } from './token.ts'
+import { createSigningFns } from './token.ts'
 
 /**
  * Creates a session callback wrapper that adds signed tokens for

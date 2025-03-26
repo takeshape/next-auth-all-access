@@ -36,8 +36,3 @@ export type AllAccessToken = {
 export type AllAccessSession = SessionContextValue['data'] & {
   allAccess: Record<string, AllAccessToken>
 }
-
-export function isJsonWebKeySet(maybeJwks: unknown): maybeJwks is JSONWebKeySet {
-  const obj = maybeJwks as JSONWebKeySet
-  return Boolean(Array.isArray(obj?.keys) && obj.keys.every((k) => k.kid))
-}

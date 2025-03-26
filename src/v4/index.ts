@@ -1,9 +1,8 @@
 import type { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
 import { NextAuthConfig } from 'next-auth'
-import { createSessionCallback } from '../callbacks.js'
 import jwksHandler from '../handlers/jwks.js'
 import openidConfigurationHandler from '../handlers/openid-configuration.js'
-import { createInitializerOptions } from '../next-auth-all-access.js'
+import { createInitializerOptions, createSessionCallback } from '../lib/index.js'
 import type { HandlerOptions, NextAuthAllAccessOptions } from '../types.js'
 
 /**
@@ -52,3 +51,5 @@ export const createNextAuthAllAccess = (options: NextAuthAllAccessOptions) => {
     return wrapNextAuth(handlerOptions, createNextAuth(nextAuthOptions))
   }
 }
+
+export default createNextAuthAllAccess

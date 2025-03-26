@@ -1,3 +1,4 @@
+import { JSONWebKeySet } from 'jose'
 import crypto from 'node:crypto'
 
 /**
@@ -48,4 +49,9 @@ export function renameKeys<T extends Record<string, unknown>>(
   })
 
   return Object.assign({}, ...keyValues) as T
+}
+
+export function isJsonWebKeySet(maybeJwks: unknown): maybeJwks is JSONWebKeySet {
+  const obj = maybeJwks as JSONWebKeySet
+  return Boolean(Array.isArray(obj?.keys) && obj.keys.every((k) => k.kid))
 }

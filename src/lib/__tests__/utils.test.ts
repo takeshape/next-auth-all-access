@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest'
-import { getOrigin } from '../utils'
+import { getOrigin } from '../utils.ts'
 
 describe('getOrigin', () => {
   beforeEach(() => {
