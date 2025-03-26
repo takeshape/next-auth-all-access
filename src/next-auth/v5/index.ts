@@ -9,8 +9,8 @@ import { createSessionCallback } from '../callbacks.ts'
 /**
  * Return an updated `NextAuthConfig`, compatible with NextAuth v5
  */
-export default function createNextAuthAllAccess(options: NextAuthAllAccessOptions) {
-  const { handlerOptions, signingOptions } = createInitializerOptions(options)
+export default async function createNextAuthAllAccess(options: NextAuthAllAccessOptions) {
+  const { handlerOptions, signingOptions } = await createInitializerOptions(options)
 
   const GET = async (req: NextRequest) => {
     const { pathname } = req.nextUrl

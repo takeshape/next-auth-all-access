@@ -11,8 +11,7 @@ export interface Client {
 
 export interface NextAuthAllAccessOptions {
   clients: Client[]
-  jwksPath?: string
-  jwks?: unknown
+  jwks: unknown
   privateKey?: string
   issuer?: string
   origin?: string

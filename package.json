@@ -45,10 +45,9 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
-    "next-auth-all-access": "bin/next-auth-all-access.js"
+    "next-auth-all-access": "./dist/bin/next-auth-all-access.js"
   },
   "files": [
-    "bin/next-auth-all-access.js",
     "dist"
   ],
   "scripts": {

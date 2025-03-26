@@ -1,40 +1,45 @@
 #!/usr/bin/env node
 /* eslint-disable no-console */
-
 import { exportJWK, exportPKCS8, generateKeyPair } from 'jose'
 import meow from 'meow'
 import crypto from 'node:crypto'
 import fs from 'node:fs'
 import path from 'node:path'
+import { DEFAULT_ALGORITHM } from '../constants.ts'
 
 const cli = meow(
   `
 	Usage
-    $ next-auth-all-access generate-keys <flags>
+    $ next-auth-all-access <flags>
 
 	Options
     --jwks-path  The path to write your jwks.json file to, defaults to './keys/jwks.json'
+    --algorithm  The algorithm to use for your key, defaults to 'RS256'
 `,
   {
     allowUnknownFlags: false,
     importMeta: import.meta,
-    input: ['generate-keys'],
     flags: {
       jwksPath: {
         type: 'string',
         shortFlag: 'p',
         default: './keys/jwks.json',
       },
+      algorithm: {
+        type: 'string',
+        shortFlag: 'a',
+        default: DEFAULT_ALGORITHM,
+      },
     },
   },
 )
 
-function keyToKid(key) {
+function keyToKid(key: string) {
   return crypto.createHash('md5').update(key).digest('hex')
 }
 
-async function main(cmd, { jwksPath }) {
-  const { publicKey, privateKey } = await generateKeyPair('RS256')
+async function main({ jwksPath, algorithm }: typeof cli.flags) {
+  const { publicKey, privateKey } = await generateKeyPair(algorithm)
 
   const privateKeyString = await exportPKCS8(privateKey)
   const privateKeyOneLine = privateKeyString.replace(/\n/g, '\\n')
@@ -60,8 +65,8 @@ ALLACCESS_PRIVATE_KEY='${privateKeyOneLine}'
       {
         ...publicJwk,
         use: 'sig',
-        alg: 'RS256',
-        kid: keyToKid(publicJwk.n),
+        alg: algorithm,
+        kid: keyToKid(publicJwk.n!),
       },
     ],
   }
@@ -74,4 +79,4 @@ Writing your JWKS file to '${jwksPath}'...
   fs.writeFileSync(jwksPath, `${JSON.stringify(jwks, null, 2)}\n`)
 }
 
-main(cli.input[0], cli.flags)
+main(cli.flags)

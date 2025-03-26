@@ -1,19 +1,5 @@
 import { JSONWebKeySet } from 'jose'
-import crypto from 'node:crypto'
 import { JWKS } from './types.ts'
-
-/**
- * Derive a JWKS Key ID an md5 of the key being identified.
- */
-export function getJwksKid(key: string) {
-  return (
-    crypto
-      .createHash('md5')
-      // The key can be a multiline string when coming from options, so normalize
-      .update(key.trim().replace(/\n/g, '\\n'))
-      .digest('hex')
-  )
-}
 
 function getVercelUrl() {
   return process.env['VERCEL_URL'] ? `https://${process.env['VERCEL_URL']}` : null
@@ -55,4 +41,12 @@ export function renameKeys<T extends Record<string, unknown>>(
 export function isJsonWebKeySet(maybeJwks: unknown): maybeJwks is JWKS {
   const obj = maybeJwks as JSONWebKeySet
   return Boolean(Array.isArray(obj?.keys) && obj.keys.length && obj.keys.every((k) => k.kid))
+}
+
+export function safeParse<T>(input: string): T | null {
+  try {
+    return JSON.parse(input) as T
+  } catch {
+    return null
+  }
 }

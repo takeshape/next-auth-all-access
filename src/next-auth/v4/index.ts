@@ -37,8 +37,8 @@ function wrapNextAuth(options: HandlerOptions, nextAuth: NextApiHandler): NextAp
   }
 }
 
-export const createNextAuthAllAccess = (options: NextAuthAllAccessOptions) => {
-  const { handlerOptions, signingOptions } = createInitializerOptions(options)
+export const createNextAuthAllAccess = async (options: NextAuthAllAccessOptions) => {
+  const { handlerOptions, signingOptions } = await createInitializerOptions(options)
 
   return (createNextAuth: (options: unknown) => any, nextAuthOptions: unknown): NextApiHandler => {
     const config = nextAuthOptions as NextAuthConfig
