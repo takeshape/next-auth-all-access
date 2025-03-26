@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import type { HandlerOptions, NextAuthAllAccessOptions } from '../types.ts'
 import { importPkcs8 } from './key.ts'
-import type { CreateSigningFnsParameters } from './token.ts'
+import type { CreateSigningFnParameters } from './token.ts'
 import { getIssuer, getOrigin, isJsonWebKeySet, sanitizeKey } from './utils.ts'
 
 export function getJwks(options: Pick<NextAuthAllAccessOptions, 'jwks' | 'jwksPath'>) {
@@ -27,16 +27,9 @@ export function getJwks(options: Pick<NextAuthAllAccessOptions, 'jwks' | 'jwksPa
 }
 
 export function createSigningOptions(
-  options: Pick<
-    NextAuthAllAccessOptions,
-    'issuer' | 'clients' | 'privateKey' | 'jwks' | 'jwksPath'
-  >,
-): CreateSigningFnsParameters {
-  const {
-    clients,
-    issuer = getIssuer(),
-    privateKey = process.env['ALLACCESS_PRIVATE_KEY'],
-  } = options
+  options: Pick<NextAuthAllAccessOptions, 'issuer' | 'privateKey' | 'jwks' | 'jwksPath'>,
+): CreateSigningFnParameters {
+  const { issuer = getIssuer(), privateKey = process.env['ALLACCESS_PRIVATE_KEY'] } = options
   const jwks = getJwks(options)
 
   if (!privateKey) {
@@ -44,7 +37,6 @@ export function createSigningOptions(
   }
 
   return {
-    clients,
     privateKey: importPkcs8(sanitizeKey(privateKey)),
     issuer,
     kid: jwks.keys[0].kid,
@@ -73,6 +65,9 @@ export function createInitializerOptions(options: NextAuthAllAccessOptions) {
   const jwks = getJwks(options)
   return {
     handlerOptions: createHandlerOptions({ ...options, jwks }),
-    signingOptions: createSigningOptions({ ...options, jwks }),
+    signingOptions: {
+      ...createSigningOptions({ ...options, jwks }),
+      clients: options.clients,
+    },
   }
 }

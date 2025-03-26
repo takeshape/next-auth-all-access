@@ -3,27 +3,17 @@ import { SignJWT } from 'jose'
 import type { AllAccessToken, AuthToken, Client } from '../types.ts'
 import { pick, renameKeys } from './utils.ts'
 
-interface CreateSignTokenParameters {
-  id: string
+export interface CreateSigningFnParameters {
   privateKey: KeyLike
-  expiration?: string | number
-  kid: string
   issuer: string
-  audience: string
-  allowedClaims?: string[]
-  renameClaims?: Record<string, string>
+  kid: string
 }
 
-export function createSigningFn({
-  id,
-  privateKey,
-  expiration,
-  kid,
-  issuer,
-  audience,
-  allowedClaims,
-  renameClaims,
-}: CreateSignTokenParameters) {
+export function createSigningFn(
+  { privateKey, kid, issuer }: CreateSigningFnParameters,
+  client: Client,
+) {
+  const { id, expiration, audience, allowedClaims, renameClaims } = client
   return async (token: AuthToken): Promise<AllAccessToken> => {
     if (allowedClaims) {
       token = pick(token, ['exp', 'iat', ...allowedClaims])
@@ -49,21 +39,20 @@ export function createSigningFn({
   }
 }
 
-export interface CreateSigningFnsParameters {
+export interface CreateSigningFnsParameters extends CreateSigningFnParameters {
   clients: Client[]
-  privateKey: KeyLike
-  issuer: string
-  kid: string
 }
 
 export function createSigningFns({ clients, privateKey, issuer, kid }: CreateSigningFnsParameters) {
   const accessTokenSigningFns = clients.map((client) =>
-    createSigningFn({
-      ...client,
-      privateKey,
-      issuer,
-      kid,
-    }),
+    createSigningFn(
+      {
+        privateKey,
+        issuer,
+        kid,
+      },
+      client,
+    ),
   )
 
   return async (token: AuthToken) => {
