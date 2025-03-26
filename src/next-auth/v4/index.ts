@@ -1,9 +1,9 @@
 import type { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
 import { NextAuthConfig } from 'next-auth'
-import jwksHandler from '../../handlers/jwks.js'
-import openidConfigurationHandler from '../../handlers/openid-configuration.js'
-import { createInitializerOptions } from '../../lib/index.js'
-import type { HandlerOptions, NextAuthAllAccessOptions } from '../../types.js'
+import jwksHandler from '../../handlers/jwks.ts'
+import openidConfigurationHandler from '../../handlers/openid-configuration.ts'
+import { createInitializerOptions } from '../../lib/index.ts'
+import type { HandlerOptions, NextAuthAllAccessOptions } from '../../lib/types.ts'
 import { createSessionCallback } from '../callbacks.ts'
 
 /**

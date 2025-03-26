@@ -1,9 +1,9 @@
 import type { NextAuthConfig } from 'next-auth'
 import { NextRequest } from 'next/server.js'
-import jwksHandler from '../../handlers/jwks.js'
-import openidConfigurationHandler from '../../handlers/openid-configuration.js'
-import { createInitializerOptions } from '../../lib/index.js'
-import type { NextAuthAllAccessOptions } from '../../types.js'
+import jwksHandler from '../../handlers/jwks.ts'
+import openidConfigurationHandler from '../../handlers/openid-configuration.ts'
+import { createInitializerOptions } from '../../lib/options.ts'
+import type { NextAuthAllAccessOptions } from '../../lib/types.ts'
 import { createSessionCallback } from '../callbacks.ts'
 
 /**

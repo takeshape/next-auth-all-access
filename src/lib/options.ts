@@ -1,7 +1,7 @@
 import fs from 'node:fs'
-import type { HandlerOptions, NextAuthAllAccessOptions } from '../types.ts'
 import { importPkcs8 } from './key.ts'
 import type { CreateSigningFnParameters } from './token.ts'
+import type { HandlerOptions, NextAuthAllAccessOptions } from './types.ts'
 import { getIssuer, getOrigin, isJsonWebKeySet, sanitizeKey } from './utils.ts'
 
 export function getJwks(options: Pick<NextAuthAllAccessOptions, 'jwks' | 'jwksPath'>) {

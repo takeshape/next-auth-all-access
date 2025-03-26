@@ -1,6 +1,6 @@
 import type { SessionContextValue } from 'next-auth/react'
 import type { SetOptional } from 'type-fest'
-import { AllAccessToken } from '../../types.ts'
+import { AllAccessToken } from '../../lib/types.ts'
 
 export interface UseSessionOptions<R extends boolean> {
   required: R

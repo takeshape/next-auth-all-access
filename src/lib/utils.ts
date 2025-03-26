@@ -1,6 +1,6 @@
 import { JSONWebKeySet } from 'jose'
 import crypto from 'node:crypto'
-import { JWKS } from '../types.ts'
+import { JWKS } from './types.ts'
 
 /**
  * Derive a JWKS Key ID an md5 of the key being identified.

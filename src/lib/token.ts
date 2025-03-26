@@ -1,6 +1,6 @@
 import type { KeyLike } from 'jose'
 import { SignJWT } from 'jose'
-import type { AllAccessToken, AuthToken, Client } from '../types.ts'
+import type { AllAccessToken, AuthToken, Client } from './types.ts'
 import { pick, renameKeys } from './utils.ts'
 
 export interface CreateSigningFnParameters {
