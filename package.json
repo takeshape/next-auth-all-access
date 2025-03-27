@@ -147,7 +147,7 @@
     "dist"
   ],
   "dependencies": {
-    "jose": "^5.2.3",
+    "jose": "^6.0.10",
     "meow": "^13.2.0"
   },
   "devDependencies": {

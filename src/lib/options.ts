@@ -8,13 +8,13 @@ export function getJwks(options: Pick<NextAuthAllAccessOptions, 'jwks'>) {
   const { jwks = process.env['ALLACCESS_JWKS'] } = options
 
   if (!jwks) {
-    throw new Error('jwks or ALLACCESS_JWKS are required')
+    throw new TypeError('jwks or ALLACCESS_JWKS are required')
   }
 
   const validJwks = typeof jwks === 'string' ? safeParse(jwks) : jwks
 
   if (!isJsonWebKeySet(validJwks)) {
-    throw new Error('JWKS is invalid')
+    throw new TypeError('JWKS is invalid')
   }
 
   return validJwks
@@ -26,16 +26,17 @@ export async function createSigningOptions(
   const { issuer = getIssuer(), privateKey = process.env['ALLACCESS_PRIVATE_KEY'] } = options
 
   if (!privateKey) {
-    throw new Error('privateKey is required')
+    throw new TypeError('privateKey is required')
   }
 
   const jwks = getJwks(options)
-  const alg = jwks.keys[0].alg ?? DEFAULT_ALGORITHM
+  const algorithm = jwks.keys[0].alg ?? DEFAULT_ALGORITHM
 
   return {
-    privateKey: await jose.importPKCS8(sanitizeKey(privateKey), alg),
+    privateKey: await jose.importPKCS8(sanitizeKey(privateKey), algorithm),
     issuer,
     kid: jwks.keys[0].kid,
+    algorithm,
   }
 }
 

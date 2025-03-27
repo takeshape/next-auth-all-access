@@ -1,21 +1,23 @@
-import type { KeyLike } from 'jose'
+import type { CryptoKey } from 'jose'
 import { SignJWT } from 'jose'
 import type { AllAccessToken, AuthToken, Client } from './types.ts'
 import { pick, renameKeys } from './utils.ts'
 
 export interface CreateSigningFnParameters {
-  privateKey: KeyLike
+  privateKey: CryptoKey
   issuer: string
   kid: string
+  algorithm: string
 }
 
 export type SigningFunction = (token: AuthToken) => Promise<AllAccessToken>
 
 export function createSigningFn(
-  { privateKey, kid, issuer }: CreateSigningFnParameters,
+  { privateKey, kid, issuer, algorithm }: CreateSigningFnParameters,
   client: Client,
 ): SigningFunction {
   const { id, expiration, audience, allowedClaims, renameClaims } = client
+
   return async (token: AuthToken): Promise<AllAccessToken> => {
     if (allowedClaims) {
       token = pick(token, ['exp', 'iat', ...allowedClaims])
@@ -25,19 +27,21 @@ export function createSigningFn(
       token = renameKeys(token, renameClaims)
     }
 
-    const signed = await new SignJWT(token)
+    const issuedAt = Date.now()
+
+    const accessToken = await new SignJWT(token)
       .setProtectedHeader({
         typ: 'JWT',
-        alg: 'RS256',
+        alg: algorithm,
         kid,
       })
       .setIssuer(issuer)
       .setAudience(audience)
+      .setIssuedAt(issuedAt)
       .setExpirationTime(expiration ?? '6h')
-      .setIssuedAt()
       .sign(privateKey)
 
-    return { id, accessToken: signed }
+    return { id, issuedAt, algorithm, accessToken }
   }
 }
 
@@ -45,17 +49,8 @@ export interface CreateSigningFnsParameters extends CreateSigningFnParameters {
   clients: Client[]
 }
 
-export function createSigningFns({ clients, privateKey, issuer, kid }: CreateSigningFnsParameters) {
-  const accessTokenSigningFns = clients.map((client) =>
-    createSigningFn(
-      {
-        privateKey,
-        issuer,
-        kid,
-      },
-      client,
-    ),
-  )
+export function createSigningFns({ clients, ...signingFnParams }: CreateSigningFnsParameters) {
+  const accessTokenSigningFns = clients.map((client) => createSigningFn(signingFnParams, client))
 
   return async (token: AuthToken) => {
     const signedTokens = await Promise.all(accessTokenSigningFns.map(async (fn) => fn(token)))

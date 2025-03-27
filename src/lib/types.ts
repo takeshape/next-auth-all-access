@@ -34,5 +34,7 @@ export type AuthToken = Record<string, unknown>
 
 export type AllAccessToken = {
   id: string
+  issuedAt: number
+  algorithm: string
   accessToken: string
 }
